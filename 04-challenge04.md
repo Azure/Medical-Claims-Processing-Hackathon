@@ -1,8 +1,6 @@
-# Challenge 4: Adding adjudicator guidance
+# Challenge 4: Not Your High School Guidance Counselor
 
-In this challenge, you will augment the functionality of the Claim Details pane by providing the adjudicator with AI generated guidance on what action to take. 
-
-You will use the Microsoft Semantic Kernel with Azure OpenAI to create a SemanticFunction that will respond with guidance for the claim. To accomplish this, examine the ReviewClaim function in the CoreClaims.SemanticKernel project, which has some placeholder code for you to complete.
+Now that you understand how business rules are used to evaluate a claim, you will augment the functionality of the Claim Details pane by providing the adjudicator with AI generated guidance on what action to take. This will be accomplished by using the Microsoft Semantic Kernel with Azure OpenAI to create a SemanticFunction that will respond with guidance for the claim. To accomplish this, examine the ReviewClaim function in the CoreClaims.SemanticKernel project, which has some placeholder code for you to complete.
 
 After creating the SemanticFunction, you will run the solution, select a claim to adjudicate and view the guidance provided to you by the language model.
 
@@ -15,18 +13,17 @@ Your team must:
 
 ### Hints
 
-- List any hints here.
+- You will need to create a new REST endpoint for the prompt interface to call your new SemanticFunction.
 
 ### Success Criteria
 
 To complete this challenge successfully, you must:
 
-- List success criteria here
+- Deploy required Azure OpenAI endpoint(s).
+- Create a new SemanticFunction and call it from a new REST endpoint.
+- Update the UI to call the new REST endpoint.
+- Select a claim to adjudicate and view the guidance provided by the language model.
 
 ### Resources
 
-- Add links here
-
-## Explore Further
-
-Add relevant information here.
+- [What is Semantic Kernel?](https://learn.microsoft.com/semantic-kernel/overview/)

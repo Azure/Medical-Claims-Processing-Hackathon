@@ -1,4 +1,4 @@
-# Challenge 1: The Landing Before the Launch
+# Challenge 1: Get Up, Set Up, Don't Let Up
 
 Contoso Insurance is drowning in a backlog of submitted medical insurance claims. They have decided to modernize their claims management application and move it to the cloud. They have asked you to help them build a proof of concept (POC) for their new application to automate the claims management process and add intelligence to assist the adjudicators in making decisions.
 
@@ -14,17 +14,30 @@ Your team must:
 ### Hints
 
 - You will need to deploy the following Azure services:
-  - TBD
+  - Resource Group
+  - Azure Blob Storage (ADLS Gen2)
+  - Azure Blob Storage account for hosting a static web app
+  - Azure Cosmos DB NoSQL API
+  - Azure OpenAI
+  - Azure Event Hubs Standard
+  - Azure Functions Consumption Plan
+  - Azure Application Insights
+  - Azure Synapse Analytics Workspace
 
 ### Success Criteria
 
 To complete this challenge successfully, you must:
 
-- TBD
+- Deploy the Azure services needed to support the claims management interface
+- Validate that the services are deployed and running
 
 ### Resources
 
-- [Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/)
+- [Azure Cosmos DB](https://learn.microsoft.com/azure/cosmos-db/)
+- [Host a static website on Blob Storage](https://learn.microsoft.com/azure/storage/blobs/storage-blob-static-website-host)
+- [Azure Synapse Analytics](https://learn.microsoft.com/azure/synapse-analytics/)
+- [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/overview)
+- [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview)
 
 ## Explore Further
 

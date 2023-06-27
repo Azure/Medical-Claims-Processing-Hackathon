@@ -1,29 +1,19 @@
-# Challenge 5: Hardcoded rules become AI generated
+# Challenge 5: Domo Arigato, AI Roboto
 
-The solution currently uses a hardcoded set of rules to evaluate a claim. 
-In the previous challenge you created a SemanticFunction to provide guidance to the adjudicator.
-In this challenge you take it one step further by creating a SemanticFunction to automatically review, approve, deny or forward the claim to a manager, replacing the hardcoded rule logic currently used by the solution.
+In the previous challenge, you got a taste for how AI can be used to provide guidance to the adjudicator. In this challenge, you will take it one step further by creating a SemanticFunction to automatically review, approve, deny or forward the claim to a manager, replacing the hardcoded rule logic currently used by the solution.
 
 ## Challenge
 
 Your team must:
 
-1. TBD
-
-### Hints
-
-- Hint
+1. Create a new SemanticFunction to automatically review, approve, deny or forward the claim to a manager.
+2. Modify the `CoreBusinessRule` class to implement the new SemanticFunction.
+3. Generate new claims to test and verify the new SemanticFunction's capability to make claim decisions.
 
 ### Success Criteria
 
 To complete this challenge successfully, you must:
 
-- Criteria
-
-### Resources
-
-- Link
-
-## Explore Further
-
-More info.
+- Have a working implementation of the new SemanticFunction that can make claim decisions.
+- Integrate the SemanticFunction into your solution.
+- Successfully generate new claims and verify that the SemanticFunction is making claim decisions.

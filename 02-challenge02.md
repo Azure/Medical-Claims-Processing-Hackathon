@@ -1,6 +1,8 @@
-# Challenge 2: It's All About the Payload
+# Challenge 2: Get Loaded
 
-Load the pregenerated sample claims data using the Synapse pipeline.
+Contoso Insurance exported a portion of their customer, adjudicator, claims, and provider data from their legacy system and stored it in Azure Blob Storage. They want to load this data into Cosmos DB so that we can begin to build the new claims management application.
+
+In this challenge, you must load the pregenerated sample claims data using an Azure Synapse pipeline.
 
 ## Challenge
 
@@ -11,17 +13,27 @@ Your team must:
 
 ### Hints
 
-- Pre-generated data can be found in the source repo under /deploy/csv (this sample data has around 100 patients).
+- Pre-generated data can be found in a public accessible Azure Blob Storage account (https://solliancepublicdata.blob.core.windows.net/medical-claims).
+- Each folder contains JSON files that should map to the Azure Cosmos DB containers as follows:
+  - `adjudicators.json` -> `Adjudicator`
+  - `claims-small.json` (where `type` == `ClaimDetail`) -> `Claim`
+  - `claims-small.json` (where `type` == `ClaimHeader`) -> `Claim`
+  - `claimprocedure.json` -> `ClaimProcedure`
+  - `members.json` -> `Member`
+  - `coverage.json` -> `Member`
+  - `providers.json` -> `Provider`
+  - `payers.json` -> `Payer`
 
 ### Success Criteria
 
 To complete this challenge successfully, you must:
 
-- TBD
+- Load all JSON data into the appropriate Cosmos DB containers.
+- Verify that the data was loaded into Cosmos DB.
 
 ### Resources
 
-- Links to tool options
+- Integrate with Azure Synapse Analytics pipelines(https://learn.microsoft.com/azure/synapse-analytics/get-started-pipelines)
 
 ## Explore Further
 
