@@ -1,5 +1,7 @@
 # Challenge 1: The Landing Before the Launch
 
+Contoso Insurance is drowning in a backlog of submitted medical insurance claims. They have decided to modernize their claims management application and move it to the cloud. They have asked you to help them build a proof of concept (POC) for their new application to automate the claims management process and add intelligence to assist the adjudicators in making decisions.
+
 For this challenge, you will deploy the services into the landing zone in preparation for the launch of the POC.
 
 ## Challenge
