@@ -27,3 +27,4 @@ To complete this challenge successfully, you must:
 ### Resources
 
 - [What is Semantic Kernel?](https://learn.microsoft.com/semantic-kernel/overview/)
+- [Creating semantic functions](https://learn.microsoft.com/semantic-kernel/ai-orchestration/semantic-functions?tabs%253DCsharp)
