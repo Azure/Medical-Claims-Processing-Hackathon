@@ -1,4 +1,4 @@
-# Challenge 3: Rules Are Made to Be Broken
+# Challenge 3: Rules Are Made to be Broken
 
 Contoso Insurance has a set of rules that they use to determine whether a claim should be approved or denied. They want to use these rules to help adjudicators make decisions on claims. They also want to be able to update the rules as needed.
 

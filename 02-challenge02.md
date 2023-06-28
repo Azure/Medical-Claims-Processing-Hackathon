@@ -33,8 +33,4 @@ To complete this challenge successfully, you must:
 
 ### Resources
 
-- Integrate with Azure Synapse Analytics pipelines(https://learn.microsoft.com/azure/synapse-analytics/get-started-pipelines)
-
-## Explore Further
-
-Add some context to the challenge and technologies used.
+- [Integrate with Azure Synapse Analytics pipelines](https://learn.microsoft.com/azure/synapse-analytics/get-started-pipelines)

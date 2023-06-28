@@ -38,7 +38,3 @@ To complete this challenge successfully, you must:
 - [Azure Synapse Analytics](https://learn.microsoft.com/azure/synapse-analytics/)
 - [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/overview)
 - [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview)
-
-## Explore Further
-
-TODO: Add relevant information about the technologies deployed in this challenge.
