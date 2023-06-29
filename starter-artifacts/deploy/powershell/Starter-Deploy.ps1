@@ -5,9 +5,9 @@ Param(
     [parameter(Mandatory=$true)][string]$location,
     [parameter(Mandatory=$true)][string]$subscription,
     [parameter(Mandatory=$false)][string]$template="starter.bicep",
-    [parameter(Mandatory=$false)][string]$openAiName,
-    [parameter(Mandatory=$false)][string]$openAiRg,
-    [parameter(Mandatory=$false)][string]$openAiDeployment,
+    [parameter(Mandatory=$true)][string]$openAiName,
+    [parameter(Mandatory=$true)][string]$openAiRg,
+    [parameter(Mandatory=$true)][string]$openAiDeployment,
     [parameter(Mandatory=$false)][string]$suffix,
     [parameter(Mandatory=$false)][string]$synapseWorkspace,
     [parameter(Mandatory=$false)][bool]$stepDeployBicep=$true,
@@ -28,6 +28,8 @@ Push-Location $($MyInvocation.InvocationName | Split-Path)
                        -openAiName $openAiName `
                        -openAiRg $openAiRg `
                        -openAiDeployment $openAiDeployment `
+                       -suffix $suffix `
+                       -synapseWorkspace $synapseWorkspace `
                        -stepDeployBicep $stepDeployBicep `
                        -stepDeployOpenAi $stepDeployOpenAi `
                        -stepPublishFunctionApp $stepPublishFunctionApp `
