@@ -15,16 +15,28 @@ Your team must:
 
 ### Hints
 
+- Search through the solution for the `TODO: Challenge 3` comments and follow the instructions provided.
 - Review the `BusinessRulesOptions` and `CoreBusinessRule` classes in the `CoreClaims.Infrastructure` project to see how the business rules function.
 - Observe data flowing through the Event Hub and Change Feed-triggered Azure Functions to see the process flow.
 - Look at which Adjudicators are assigned in the business rules and see how that controls claim assignments for demo purposes.
+- Since the app uses role-based access control (RBAC), if you want to run the Function App locally, you have to assign yourself to the "Cosmos DB Built-in Data Contributor" role via the Azure Cloud Shell or Azure CLI with the following:
+
+    ```bash
+    az cosmosdb sql role assignment create --account-name YOUR_COSMOS_DB_ACCOUNT_NAME --resource-group YOUR_RESOURCE_GROUP_NAME --scope "/" --principal-id YOUR_AZURE_AD_PRINCIPAL_ID --role-definition-id 00000000-0000-0000-0000-000000000002
+    ```
+
+- Event Hubs is also using RBAC. There is an Event Hubs-triggered function in the Function App that fires when adding claims through the `CoreClaims.Publisher` console app. You need to add yourself to the "Azure Event Hubs Data Owner" role via the Azure Cloud Shell or Azure CLI with the following:
+
+    ```bash
+    az role assignment create --assignee "YOUR_EMAIL_ADDRESS" --role "Azure Event Hubs Data Owner" --scope "/subscriptions/YOUR_AZURE_SUBSCRIPTION_ID/resourceGroups/YOUR_RESOURCE_GROUP_NAME/providers/Microsoft.EventHub/namespaces/YOUR_EVENT_HUBS_NAMESPACE"
+    ```
 
 ### Success Criteria
 
 To complete this challenge successfully, you must:
 
 - Generate a small batch of claims through the `CoreClaims.Publisher` console application.
-- Verify that the claims were processed by the Azure Functions and written to Cosmos DB.
+- Verify that the claims were processed by the Azure Functions and written to Cosmos DB. You can do this by debugging the Function App locally and setting breakpoints in the Event Hubs and Change Feed-triggered functions to walk through the process. Use the Azure Cosmos DB Data Explorer to verify that the claims were written to the database.
 - Acknowledge an assigned claim as an adjudicator in the UI.
 - Deny a claim.
 - Propose a claim for approval without applying discounts.

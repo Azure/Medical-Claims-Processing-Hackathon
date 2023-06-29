@@ -13,7 +13,14 @@ Your team must:
 
 ### Hints
 
-- Pre-generated data can be found in a public accessible Azure Blob Storage account (https://solliancepublicdata.blob.core.windows.net/medical-claims).
+
+- If you did not deploy the Azure Synapse Analytics workspace but someone else on your team did, you can be granted access to the workspace by executing the following command in the Azure Cloud Shell or Azure CLI:
+
+    ```bash
+    az synapse role assignment create --workspace-name YOUR_SYNAPSE_WORKSPACE_NAME --role 6e4bf58a-b8e1-4cc3-bbf9-d73143322b78 --assignee YOUR_AZURE_AD_PRINCIPAL_ID
+    ```
+
+- Pre-generated data can be found in a publicly accessible Azure Blob Storage account (https://solliancepublicdata.blob.core.windows.net/medical-claims).
 - Each folder contains JSON files that should map to the Azure Cosmos DB containers as follows:
   - `adjudicators.json` -> `Adjudicator`
   - `claims-small.json` (where `type` == `ClaimDetail`) -> `Claim`

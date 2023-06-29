@@ -9,12 +9,13 @@ For this challenge, you will deploy the services into the landing zone in prepar
 Your team must:
 
 1. Deploy the Azure services needed to support the claims management interface
-2. Set up your development environment
+2. Clone the repo with the starter artifacts
+3. Set up your development environment
 
 ### Hints
 
-- You will need to deploy the following Azure services:
-  - Resource Group
+- Contoso Insurance has provided you a script to deploy the foundation of your Azure environment. See the instructions in the README.md of the repo.
+- You will need to deploy the following Azure services within a new Resource Group:
   - Azure Blob Storage (ADLS Gen2)
   - Azure Blob Storage account for hosting a static web app
   - Azure Cosmos DB NoSQL API
@@ -23,11 +24,13 @@ Your team must:
   - Azure Functions Consumption Plan
   - Azure Application Insights
   - Azure Synapse Analytics Workspace
+- You will load data in a later challenge, but you can get a head start by deploying the Azure Synapse Analytics workspace now.
 
 ### Success Criteria
 
 To complete this challenge successfully, you must:
 
+- Clone the repo with the starter artifacts and deployment scripts
 - Deploy the Azure services needed to support the claims management interface
 - Validate that the services are deployed and running
 
