@@ -72,11 +72,16 @@ namespace CoreClaims.Infrastructure.Repository
 
         public async Task<Member> IncrementMemberTotals(string memberId, int count, decimal amount)
         {
+            /* TODO: Challenge 3.
+             * Uncomment and complete the following lines as instructed.
+             */
             var response = await Container.PatchItemAsync<Member>(memberId, new PartitionKey(memberId),
                 patchOperations: new[]
                 {
-                    PatchOperation.Increment("/approvedCount", count),
-                    PatchOperation.Increment("/approvedTotal", decimal.ToDouble(amount)),
+                    // TODO: Increment the approvedCount and approvedTotal properties with patch operations.
+                    //       Convert the amount to a double using the decimal.ToDouble method.
+                    //PatchOperation.______("/approvedCount", _______),
+                    //PatchOperation.______("/approvedTotal", _______),
                     PatchOperation.Replace("/modifiedBy", "System/IncrementTotals"),
                     PatchOperation.Replace("/modifiedOn", DateTime.UtcNow), 
                 });

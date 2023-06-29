@@ -25,6 +25,10 @@ namespace CoreClaims.Infrastructure.BusinessRules
 
         public async Task<ClaimDetail> AssignClaim(ClaimDetail claim)
         {
+            /* TODO: Challenge 3.
+             * Uncomment and complete the following lines as instructed.
+             */
+            
             // If claim has no member, set status to Pending.
             if (string.IsNullOrEmpty(claim.MemberId))
             {
@@ -44,12 +48,14 @@ namespace CoreClaims.Infrastructure.BusinessRules
             }
 
             // If claim's total amount is less than 200, set status to Approved.
-            if (claim.TotalAmount < _options.Value.AutoApproveThreshold)
-            {
-                claim.ClaimStatus = ClaimStatus.Approved;
-                claim.Comment = $"[Automatic] Approved: Less than threshold of {_options.Value.AutoApproveThreshold}";
-                return claim;
-            }
+            // TODO: If the claim's TotalAmount value is less than the AutoApproveThreshold in the BusinessRulesOptions,
+            //       set the claim status to Approved and return the claim..
+            // if (claim._____ < _____)  // Complete this line.
+            // {
+            //     claim.ClaimStatus = _________________;
+            //     claim.Comment = $"[Automatic] Approved: Less than threshold of {_options.Value.AutoApproveThreshold}";
+            //     return ________________;
+            // }
 
             // Select random adjudicator.
             if (string.IsNullOrEmpty(claim.AdjudicatorId))

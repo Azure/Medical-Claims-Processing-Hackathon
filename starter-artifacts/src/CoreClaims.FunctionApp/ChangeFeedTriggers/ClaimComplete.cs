@@ -39,6 +39,9 @@ namespace CoreClaims.FunctionApp.ChangeFeedTriggers
             FunctionContext context
             )
         {
+            /* TODO: Challenge 3.
+             * Uncomment and complete the following lines as instructed.
+             */
             var logger = context.GetLogger<ClaimComplete>();
             using var logScope = logger.BeginScope("CosmosDbTrigger: ClaimComplete");
 
@@ -51,8 +54,9 @@ namespace CoreClaims.FunctionApp.ChangeFeedTriggers
                     switch (claim.ClaimStatus)
                     {
                         case ClaimStatus.Approved:
-                            //TODO: Consider moving to workflow ChangeFeed
-                            await _memberRepository.IncrementMemberTotals(claim.MemberId, 1, claim.TotalAmount);
+                            //TODO: Increment the member totals by calling a method on the Member repository.
+                            //      Pass to the method the MemberId, a count of 1, and the total amount from the claim.
+                            //await _memberRepository._______(______, ______, ______);
                             await _eventHub.TriggerEventAsync(claim, Constants.EventHubTopics.Approved);
                             break;
                         case ClaimStatus.Denied:

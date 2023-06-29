@@ -35,6 +35,9 @@ namespace CoreClaims.FunctionApp.ChangeFeedTriggers
                 LeaseContainerPrefix = "PropagateClaimHeader")] IReadOnlyList<ClaimHeader> input,
             FunctionContext context)
         {
+            /* TODO: Challenge 3.
+             * Uncomment and complete the following lines as instructed.
+             */
             var logger = context.GetLogger<ClaimUpdated>();
             using var logScope = logger.BeginScope("CosmosDbTrigger: ClaimUpdated");
 
@@ -44,13 +47,15 @@ namespace CoreClaims.FunctionApp.ChangeFeedTriggers
             {
                 if (!string.IsNullOrEmpty(claim.MemberId))
                 {
-                    await _memberRepository.UpsertClaim(claim);
+                    // TODO: Upsert the claim in the Member repository.
+                    //await __________;
                     logger.LogInformation($"Updating ClaimHeader/{claim.ClaimId}/{claim.AdjustmentId} for Member/{claim.MemberId}");
                 }
 
                 if (!string.IsNullOrEmpty(claim.AdjudicatorId))
                 {
-                    await _adjudicatorRepository.UpsertClaim(claim);
+                    // TODO: Upsert the claim in the Adjudicator repository.
+                    //await __________;
                     logger.LogInformation($"Updating ClaimHeader/{claim.ClaimId}/{claim.AdjustmentId} for Adjudicator/{claim.AdjudicatorId}");
                 }
             }

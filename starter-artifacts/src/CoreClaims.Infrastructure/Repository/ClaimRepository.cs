@@ -43,13 +43,17 @@ namespace CoreClaims.Infrastructure.Repository
 
         public async Task<ClaimHeader> CreateClaim(ClaimDetail detail)
         {
+            /* TODO: Challenge 3.
+             * Uncomment and complete the following lines as instructed.
+             */
             detail.CreatedOn = detail.ModifiedOn = DateTime.UtcNow.ToString();
 
             var header = new ClaimHeader(detail);
 
-            var batch = Container.CreateTransactionalBatch(new PartitionKey(detail.ClaimId));
-            batch.CreateItem(header);
-            batch.CreateItem(detail);
+            // TODO: Create a transactional batch to create the header and detail items.
+            //var batch = Container.____________(new PartitionKey(detail.ClaimId));
+            //batch.____________(header);
+            //batch.____________(detail);
 
             using (var response = await batch.ExecuteAsync())
             {
