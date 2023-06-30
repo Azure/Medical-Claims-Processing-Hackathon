@@ -8,8 +8,7 @@ After creating the SemanticFunction, you will run the solution, select a claim t
 
 Your team must:
 
-1. Load new data using the data loading mechanism you created in a previous challenge.
-2. Ask a question through the prompt interface and see if it returns an answer about the new data you loaded.
+1. Ask a question through the prompt interface and see if it returns an answer about the new data you loaded.
 
 ### Hints
 
