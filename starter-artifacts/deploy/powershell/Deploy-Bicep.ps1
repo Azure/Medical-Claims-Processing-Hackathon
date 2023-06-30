@@ -3,6 +3,7 @@
 Param(
     [parameter(Mandatory=$true)][string]$resourceGroup,
     [parameter(Mandatory=$true)][string]$location,
+    [parameter(Mandatory=$false)][string]$template="main.bicep",
     [parameter(Mandatory=$false)][string]$openAiName,
     [parameter(Mandatory=$false)][string]$openAiRg,
     [parameter(Mandatory=$false)][string]$openAiDeployment,
@@ -12,7 +13,7 @@ Param(
 Push-Location $($MyInvocation.InvocationName | Split-Path)
 $sourceFolder=$(Join-Path -Path ../.. -ChildPath infrastructure)
 
-$script="main.bicep"
+$script=$template
 
 Write-Host "--------------------------------------------------------" -ForegroundColor Yellow
 Write-Host "Deploying Bicep script $script" -ForegroundColor Yellow
