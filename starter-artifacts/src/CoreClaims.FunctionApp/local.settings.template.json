@@ -1,7 +1,7 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage__accountName": "adlcoreclaims{{suffix}}",
+    "AzureWebJobsStorage__accountName": "UseDevelopmentStorage=true",
     "CoreClaimsCosmosDB__accountEndpoint": "https://db-coreclaims-{{suffix}}.documents.azure.com:443/",
     "CoreClaimsEventHub__fullyQualifiedNamespace": "eh-coreclaims-{{suffix}}.servicebus.windows.net",
     "BusinessRuleOptions__AutoApproveThreshold": "200",

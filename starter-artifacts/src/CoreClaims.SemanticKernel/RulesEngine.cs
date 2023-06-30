@@ -18,16 +18,20 @@ namespace CoreClaims.SemanticKernel
 
         public async Task<string> ReviewClaim(ClaimDetail claim)
         {
+            /* TODO: Challenge 4.
+             * Uncomment and complete the following lines as instructed.
+             */
             await Task.CompletedTask;
 
-            var builder = new KernelBuilder();
+            // TODO: Uncomment the code below and instantiate a new KernelBuilder.
+            //var builder = __________;
+            // builder.WithAzureTextCompletionService(
+            //          _settings.OpenAICompletionsDeployment,
+            //          _settings.OpenAIEndpoint,
+            //          _settings.OpenAIKey);
 
-            builder.WithAzureTextCompletionService(
-                     _settings.OpenAICompletionsDeployment,
-                     _settings.OpenAIEndpoint,
-                     _settings.OpenAIKey);
-
-            var kernel = builder.Build();
+            // TODO: Create a new kernel instance from the builder.
+            //var kernel = ___________;
 
             string skPrompt = @"
             You are an insurance claim review agent. You are provided data about a claim in JSON format and rules to evaluate the claim and classify it with a review result. 
@@ -124,7 +128,9 @@ namespace CoreClaims.SemanticKernel
                 [Your Review Result Reasoning]
             ";
 
-            var reviewer = kernel.CreateSemanticFunction(skPrompt, "review", "ReviewSkill", description: "Review the claim and make approval or denial recommendation.", maxTokens: 2000, temperature: 0.0);
+            // TODO: Complete the code below to create a new semantic function for the review skill.
+            // HINT: The first parameter is the semantic kernel prompt created above.
+            //var reviewer = kernel.CreateSemanticFunction(______, "review", "ReviewSkill", description: "Review the claim and make approval or denial recommendation.", maxTokens: 2000, temperature: 0.0);
 
             JsonSerializerOptions ser_options = new()
             {
@@ -137,20 +143,22 @@ namespace CoreClaims.SemanticKernel
 
             string claimData = JsonSerializer.Serialize(claim, ser_options);
 
-            var context = kernel.CreateNewContext();
-            context["claim"] = claimData;
+            // TODO: Uncomment the below two lines to create a new context from the kernel and set the claim context to your claim data.
+            //var context = kernel._______();
+            //context["claim"] = claimData;
 
-            var response = await reviewer.InvokeAsync(context);
+            // TODO: Uncomment all of the lines below to finish the review skill invocation.
+            //var response = await reviewer.InvokeAsync(context);
 
-            string result;
-            if (response.ErrorOccurred)
-            {
-                result = response.LastException.ToString();
-            }
-            else
-            {
-                result = response.Result;
-            }
+            string result = string.Empty;
+            // if (response.ErrorOccurred)
+            // {
+            //     result = response.LastException.ToString();
+            // }
+            // else
+            // {
+            //     result = response.Result;
+            // }
 
             return result;
         }

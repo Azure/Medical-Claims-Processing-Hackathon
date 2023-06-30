@@ -21,5 +21,6 @@ To complete this challenge successfully, you must:
 ### Resources
 
 - [Automatically orchestrate AI with planner](https://learn.microsoft.com/semantic-kernel/ai-orchestration/planner?tabs%253DCsharp)
+- [Creating semantic functions](https://learn.microsoft.com/semantic-kernel/ai-orchestration/semantic-functions?tabs%253DCsharp)
 - [Semantic Kernel native functions](https://learn.microsoft.com/semantic-kernel/ai-orchestration/native-functions)
 - [Prompt engineering techniques](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/advanced-prompt-engineering?pivots%253Dprogramming-language-chat-completions)

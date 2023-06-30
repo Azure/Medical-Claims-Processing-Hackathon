@@ -32,6 +32,24 @@ To complete this challenge successfully, you must:
 
 - Clone the repo with the starter artifacts and deployment scripts
 - Deploy the Azure services needed to support the claims management interface
+- Deploy Azure OpenAI with the following deployments:
+  - `completions-003` with the `text-davinci-003` model
+- Deploy an Azure Cosmos DB account with the following configurations:
+  - API: NoSQL
+  - Consistency: Session
+  - Geo-Redundancy: Disabled
+  - Multi-region writes: Disabled
+  - Analytical store: Disabled
+  - Autoscale: Enabled
+  - Provision throughput: 1000 RU/s
+  - Create a database named `CoreClaimsApp`
+  - Create new containers named:
+    - `Adjudicator` with partition key `/adjudicatorId`
+    - `Claim` with partition key `/claimId` and autoscale throughput with a maximum of 2000 RU/s
+    - `ClaimProcedure` with partition key `/code`
+    - `Member` with partition key `/memberId` and autoscale throughput with a maximum of 1000 RU/s
+    - `Payer` with partition key `/payerId`
+    - `Provider` with partition key `/providerId`
 - Validate that the services are deployed and running
 
 ### Resources
