@@ -1,6 +1,6 @@
-# Azure Cosmos DB & OpenAI Reference Architecture: Medical Claims Management Hackathon
+# Azure Cosmos DB & Azure OpenAI Service Reference Architecture: Medical Claims Management Hackathon
 
-Contoso Insurance manages medical insurance claims through a custom-built application. The application is built on a legacy platform that is difficult to maintain and is not scalable. They want to modernize their application and move it to the cloud. They have decided to use Azure Cosmos DB as the database for their new application. They have also decided to use OpenAI to help with the claims management process. They have asked you to help them build a proof of concept (POC) for their new application.
+Contoso Insurance manages medical insurance claims through a custom-built application. The application is built on a legacy platform that is difficult to maintain and is not scalable. They want to modernize their application and move it to the cloud. They have decided to use Azure Cosmos DB as the database for their new application. They have also decided to use Azure OpenAI Service to help with the claims management process. They have asked you to help them build a proof of concept (POC) for their new application.
 
 Currently, Contoso has a very tedious process for managing and processing claims. This process involves an extensive amount of human interaction and, therefore, clerical errors are imminent. The manual nature of the process, including the relatively high amount of issues that arise from data introduced by human entry alone, adds unnecessary costs to the company. These costs are realized in the inputting and the processing of the claim. Contoso is seeking help as they search for a better way to process claims.
 
@@ -16,7 +16,7 @@ Their long-term goal after accomplishing the above, which lays the ground work f
 ## Prerequisites
 
 - Azure Subscription
-- Subscription with access to the Azure OpenAI service. Start here to [Request Access to Azure OpenAI Service](https://customervoice.microsoft.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR7en2Ais5pxKtso_Pz4b1_xUOFA5Qk1UWDRBMjg0WFhPMkIzTzhKQ1dWNyQlQCN0PWcu)
+- Subscription with access to the Azure OpenAI Service. Start here to [Request Access to Azure OpenAI Service](https://customervoice.microsoft.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR7en2Ais5pxKtso_Pz4b1_xUOFA5Qk1UWDRBMjg0WFhPMkIzTzhKQ1dWNyQlQCN0PWcu)
 
 ### Prerequisites for running/debugging locally
 
