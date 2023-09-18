@@ -57,8 +57,8 @@ echo "Directory changed: '$(pwd)'"
 cp ./CoreClaims.FunctionApp/local.settings{.template,}.json 
 cp ./CoreClaims.Publisher/settings{.template,}.json 
 
-COSMOSKEY=$(az cosmosdb keys list -g $RESOURCE_GROUP --name db-coreclaims-$SUFFIX --type keys --query primaryMasterKey -o tsv)
-EVENTHUBKEY=$(az eventhubs namespace authorization-rule keys list -g $RESOURCE_GROUP --namespace-name eh-coreclaims-$SUFFIX --name RootManageSharedAccessKey --query primaryKey -o tsv)
+COSMOSKEY=$(az cosmosdb keys list -g $RESOURCE_GROUP --name dbcoreclaims$SUFFIX --type keys --query primaryMasterKey -o tsv)
+EVENTHUBKEY=$(az eventhubs namespace authorization-rule keys list -g $RESOURCE_GROUP --namespace-name ehcoreclaims$SUFFIX --name RootManageSharedAccessKey --query primaryKey -o tsv)
 
 # File to modify
 FILES_TO_REPLACE="CoreClaims.Publisher/settings.json CoreClaims.FunctionApp/local.settings.json"
@@ -89,7 +89,8 @@ echo "***************************************************"
 echo "*************  Deploy completed!  *****************"
 echo "Next steps:"
 echo "1. Deploy Synapse workspace"
-echo "2. Run Synapse ingestion job to prepopulate data"
-echo "3. Run Publisher to generate claims"
-echo "4. Call APIs"
+echo "2. Run Synthea to generate sample data"
+echo "3. Run Synapse ingestion job to prepopulate data"
+echo "4. Run Publisher to generate claims"
+echo "5. Call APIs"
 echo "***************************************************"
