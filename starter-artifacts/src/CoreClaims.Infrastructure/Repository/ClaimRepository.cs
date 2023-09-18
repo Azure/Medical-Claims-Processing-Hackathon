@@ -1,6 +1,7 @@
 ﻿using CoreClaims.Infrastructure.Domain;
 using CoreClaims.Infrastructure.Domain.Entities;
 using CoreClaims.Infrastructure.Helpers;
+using CoreClaims.Infrastructure.Models;
 using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json.Linq;
 
@@ -31,14 +32,26 @@ namespace CoreClaims.Infrastructure.Repository
             return ReadItem<ClaimHeader>(claimId, $"claim:{claimId}");
         }
 
-        public async Task<IEnumerable<ClaimDetail>> GetClaimDetails(string claimId, int offset = 0, int limit = Constants.DefaultPageSize)
+        public async Task<IPageResult<ClaimDetail>> GetClaimDetails(string claimId, int offset = 0, int limit = Constants.DefaultPageSize)
         {
+            const string countSql = @"
+                            SELECT VALUE COUNT(1) FROM c
+                            WHERE c.claimId = @claimId AND c.type = 'ClaimDetail'";
+
+            var countQuery = new QueryDefinition(countSql)
+                .WithParameter("@claimId", claimId);
+
+            var countResult = await Container.GetItemQueryIterator<int>(countQuery).ReadNextAsync();
+            var count = countResult.Resource.FirstOrDefault();
+
             var queryDetails = new QueryDefinition("SELECT * FROM c WHERE c.claimId = @claimId AND c.type = 'ClaimDetail' OFFSET @offset LIMIT @limit")
                 .WithParameter("@claimId", claimId)
                 .WithParameter("@offset", offset)
                 .WithParameter("@limit", limit);
 
-            return (await Query<ClaimDetail>(queryDetails, new PartitionKey(claimId))).OrderBy(c => c.ModifiedOn).ToList();
+            var result = (await Query<ClaimDetail>(queryDetails, new PartitionKey(claimId))).OrderBy(c => c.ModifiedOn).ToList();
+
+            return new PageResult<ClaimDetail>(count, offset, limit, result);
         }
 
         public async Task<ClaimHeader> CreateClaim(ClaimDetail detail)
@@ -55,19 +68,24 @@ namespace CoreClaims.Infrastructure.Repository
             //batch.____________(header);
             //batch.____________(detail);
 
-            using (var response = await batch.ExecuteAsync())
-            {
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception(response.ErrorMessage); // TODO: Better than this
-                }
+            // TODO: Delete the following line.
+            return header;
 
-                return response.GetOperationResultAtIndex<ClaimHeader>(0).Resource;
-            };
+            // TODO: Uncomment the following lines.
+            // using (var response = await batch.ExecuteAsync())
+            // {
+            //     if (!response.IsSuccessStatusCode)
+            //     {
+            //         throw new Exception(response.ErrorMessage);
+            //     }
+
+            //     return response.GetOperationResultAtIndex<ClaimHeader>(0).Resource;
+            // };
         }
 
         public async Task<ClaimHeader> UpdateClaim(ClaimDetail detail)
         {
+            //detail.ModifiedOn = DateTime.UtcNow.ToString();
             detail.ModifiedOn = DateTime.UtcNow;
             detail.AdjustmentId++;
 
@@ -110,6 +128,16 @@ namespace CoreClaims.Infrastructure.Repository
                     case ClaimDetail.EntityName:
                         details.Add(row.ToObject<ClaimDetail>());
                         break;
+                }
+            }
+
+            // Remove duplicate claim history item that matches the current claim header.
+            if (header != null && details.Any())
+            {
+                var duplicate = details.FirstOrDefault(d => d.AdjustmentId == header.AdjustmentId);
+                if (duplicate != null)
+                {
+                    details.Remove(duplicate);
                 }
             }
 
