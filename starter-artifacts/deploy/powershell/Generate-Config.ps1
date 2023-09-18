@@ -1,9 +1,10 @@
 Param(
     [parameter(Mandatory=$true)][string]$resourceGroup,
-    [parameter(Mandatory=$false)][string]$openAiName,
-    [parameter(Mandatory=$false)][string]$openAiRg,
-    [parameter(Mandatory=$false)][string]$openAiDeployment,
-    [parameter(Mandatory=$true)][string]$suffix
+    [parameter(Mandatory=$true)][string]$suffix,
+    [parameter(Mandatory=$false)][string[]]$outputFile=$null,
+    [parameter(Mandatory=$false)][string[]]$gvaluesTemplate="..,..,gvalues.template.yml",
+    [parameter(Mandatory=$false)][string]$ingressClass="addon-http-application-routing",
+    [parameter(Mandatory=$false)][string]$domain
 )
 
 function EnsureAndReturnFirstItem($arr, $restype) {
@@ -28,14 +29,16 @@ $tokens=@{}
 
 ## Getting Datalake info
 $dataLakeEndpoint=$(az storage account list -g $resourceGroup -o json | ConvertFrom-Json)[0].primaryEndpoints.dfs
+$dataLakeAccountName=$(az storage account list -g $resourceGroup -o json | ConvertFrom-Json)[0].name
 
-## Getting Function App info
-$functionAppHostname=$(az functionapp list -g $resourceGroup -o json | ConvertFrom-Json).hostNames
+# Ingress endpoint
+$aksName = $(az aks list -g $resourceGroup -o json | ConvertFrom-Json).name
+$webappHostname=$(az aks show -n $aksName -g $resourceGroup -o json --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName | ConvertFrom-Json)
+$apiUrl = "https://${webappHostname}/api"
 
 ## Getting CosmosDb info
 $docdb=$(az cosmosdb list -g $resourceGroup --query "[?kind=='GlobalDocumentDB'].{name: name, kind:kind, documentEndpoint:documentEndpoint}" -o json | ConvertFrom-Json)
 $docdb=EnsureAndReturnFirstItem $docdb "CosmosDB (Document Db)"
-$docdbKey=$(az cosmosdb keys list -g $resourceGroup -n $docdb.name -o json --query primaryMasterKey | ConvertFrom-Json)
 Write-Host "Document Db Account: $($docdb.name)" -ForegroundColor Yellow
 
 ## Getting EventHub info
@@ -50,40 +53,60 @@ if ($appInsightsName -and $appInsightsName.Length -eq 1) {
 
     if ($appinsightsConfig) {
         $appinsightsId = $appinsightsConfig.instrumentationKey           
+        $appinsightsConnectionString = $appinsightsConfig.connectionString 
     }
 }
 Write-Host "App Insights Instrumentation Key: $appinsightsId" -ForegroundColor Yellow
 
 ## Getting OpenAI info
-if ($openAiName) {
-    $openAi=$(az cognitiveservices account show -n $openAiName -g $openAiRg -o json | ConvertFrom-Json)
-} else {
-    $openAi=$(az cognitiveservices account list -g $openAiRg --query "[?kind=='OpenAI'].{name: name, kind:kind, endpoint: properties.endpoint}" -o json | ConvertFrom-Json)
-}
+$openAi=$(az cognitiveservices account list -g $resourceGroup --query "[?kind=='OpenAI'].{name: name, kind:kind, endpoint: properties.endpoint}" -o json | ConvertFrom-Json)
 
-$openAiKey=$(az cognitiveservices account keys list -g $openAiRg -n $openAi.name -o json --query key1 | ConvertFrom-Json)
+$openAiKey=$(az cognitiveservices account keys list -g $resourceGroup -n $openAi.name -o json --query key1 | ConvertFrom-Json)
 
-if (-not $openAiDeployment) {
-    $openAiDeployment = "completions"
-}
+$openAiDeployment = "completions"
 
+$apiIdentityClientId=$(az identity show -g $resourceGroup -n mi-api-coreclaims-$suffix -o json | ConvertFrom-Json).clientId
+$workerIdentityClientId=$(az identity show -g $resourceGroup -n mi-worker-coreclaims-$suffix -o json | ConvertFrom-Json).clientId
+$tenantId=$(az account show --query homeTenantId --output tsv)
 ## Showing Values that will be used
 
 Write-Host "===========================================================" -ForegroundColor Yellow
 Write-Host "settings.json files will be generated with values:"
 
 $tokens.suffix=$suffix
-$tokens.cosmosKey=$docdbKey
 $tokens.cosmosEndpoint=$docdb.documentEndpoint
-$tokens.dataLakeEndpoint=$datalakeEndpoint
+$tokens.dataLakeEndpoint=$dataLakeEndpoint
+$tokens.dataLakeAccountName=$dataLakeAccountName
 $tokens.eventHubKey=$eventHubKey
-$tokens.openAiEndpoint=$openAi.properties.endpoint
+$tokens.openAiEndpoint=$openAi.endpoint
 $tokens.openAiKey=$openAiKey
-$tokens.openAiDeployment=$openAiDeployment
-$tokens.apiUrl="https://${functionAppHostName}/api"
+$tokens.openAiCompletionsDeployment=$openAiDeployment
+$tokens.apiClientId=$apiIdentityClientId
+$tokens.workerClientId=$workerIdentityClientId
+$tokens.tenantId=$tenantId
+$tokens.aiConnectionString=$appinsightsConnectionString
+$tokens.apiUrl=$apiUrl
+
+# Standard fixed tokens
+$tokens.ingressclass=$ingressClass
+$tokens.ingressrewritepath="(.*)"
+$tokens.ingressrewritetarget="`$1"
+
+if($ingressClass -eq "nginx") {
+    $tokens.ingressrewritepath="(.*)" 
+    $tokens.ingressrewritetarget="`$1"
+}
 
 Write-Host ($tokens | ConvertTo-Json) -ForegroundColor Yellow
 Write-Host "===========================================================" -ForegroundColor Yellow
+
+Push-Location $($MyInvocation.InvocationName | Split-Path)
+$gvaluesTemplatePath=$(./Join-Path-Recursively -pathParts $gvaluesTemplate.Split(","))
+Write-Host $gvaluesTemplatePath
+$outputFilePath=$(./Join-Path-Recursively -pathParts $outputFile.Split(","))
+Write-Host $outputFilePath
+& ./Token-Replace.ps1 -inputFile $gvaluesTemplatePath -outputFile $outputFilePath -tokens $tokens
+Pop-Location
 
 $publisherSettingsTemplate="..,..,src,CoreClaims.Publisher,settings.template.json"
 $publisherSettings="..,..,src,CoreClaims.Publisher,settings.json"
@@ -93,12 +116,20 @@ $publisherSettingsPath=$(./Join-Path-Recursively -pathParts $publisherSettings.S
 & ./Token-Replace.ps1 -inputFile $publisherSettingsTemplatePath -outputFile $publisherSettingsPath -tokens $tokens
 Pop-Location
 
-$functionappSettingsTemplate="..,..,src,CoreClaims.FunctionApp,local.settings.template.json"
-$functionappSettings="..,..,src,CoreClaims.FunctionApp,local.settings.json"
+$webapiSettingsTemplate="..,..,src,CoreClaims.WebAPI,appsettings.Development.template.json"
+$webapiSettings="..,..,src,CoreClaims.WebAPI,appsettings.Development.json"
 Push-Location $($MyInvocation.InvocationName | Split-Path)
-$functionappSettingsTemplatePath=$(./Join-Path-Recursively -pathParts $functionappSettingsTemplate.Split(","))
-$functionappSettingsPath=$(./Join-Path-Recursively -pathParts $functionappSettings.Split(","))
-& ./Token-Replace.ps1 -inputFile $functionappSettingsTemplatePath -outputFile $functionappSettingsPath -tokens $tokens
+$webapiSettingsTemplatePath=$(./Join-Path-Recursively -pathParts $webapiSettingsTemplate.Split(","))
+$webapiSettingsPath=$(./Join-Path-Recursively -pathParts $webapiSettings.Split(","))
+& ./Token-Replace.ps1 -inputFile $webapiSettingsTemplatePath -outputFile $webapiSettingsPath -tokens $tokens
+Pop-Location
+
+$workerserviceSettingsTemplate="..,..,src,CoreClaims.WorkerService,appsettings.Development.template.json"
+$workerserviceSettings="..,..,src,CoreClaims.WorkerService,appsettings.Development.json"
+Push-Location $($MyInvocation.InvocationName | Split-Path)
+$workerserviceSettingsTemplatePath=$(./Join-Path-Recursively -pathParts $workerserviceSettingsTemplate.Split(","))
+$workerserviceSettingsPath=$(./Join-Path-Recursively -pathParts $workerserviceSettings.Split(","))
+& ./Token-Replace.ps1 -inputFile $workerserviceSettingsTemplatePath -outputFile $workerserviceSettingsPath -tokens $tokens
 Pop-Location
 
 $coreClaimsDatalakeTemplate="..,..,synapse,linkedService,CoreClaimsDataLake.template.json"
