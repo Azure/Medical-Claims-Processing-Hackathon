@@ -104,7 +104,7 @@ namespace CoreClaims.Infrastructure.BusinessRules
             return claim;
         }
 
-        public async Task<ClaimDetail> AdjudicateClaim(ClaimDetail claim)
+        public async Task<(ClaimDetail, bool)> AdjudicateClaim(ClaimDetail claim)
         {
             /* TODO: Challenge 3.
              * Uncomment and complete the following lines as instructed.
@@ -112,8 +112,9 @@ namespace CoreClaims.Infrastructure.BusinessRules
 
             // TODO: Retrieve the Adjudicator from the AdjudicatorRepository based on the AdjudicatorId assigned to the claim:
             //var adjudicator = _________________________;
+            var adjudicatorChanged = false;
 
-            // TODO: Check if the adjudicator has a Manager role. If so, set status to Approved, add a comment to the claim, and return the claim.
+            // TODO: Check if the adjudicator has a Manager role. If so, set status to Approved, add a comment to the claim, and return the claim and adjudicatorChanged values.
             //if (__ == __)
             //{
             //    claim.ClaimStatus = _____________;
@@ -124,7 +125,7 @@ namespace CoreClaims.Infrastructure.BusinessRules
             if (claim.LastAmount.HasValue)
             {
                 // TODO: Check if the difference between the LastAmount and TotalAmount is less than or equal to the RequireManagerApproval threshold.
-                // If so, set status to Approved, add a comment to the claim, and return the claim.
+                // If so, set status to Approved, add a comment to the claim, and return the claim and adjudicatorChanged values.
                 decimal difference = Math.Abs(claim.LastAmount.Value - claim.TotalAmount);
                 //if (difference <= ______)
                 // {
@@ -146,6 +147,9 @@ namespace CoreClaims.Infrastructure.BusinessRules
                 //manager = _________________________;
             }
 
+            if (manager == null)
+                throw new NullReferenceException("Unable to find an appropriate manager to assign approval to");
+
             // TODO: If a manager was found, set the claim's PreviousAdjudicatorId to the claim's AdjudicatorId, set the claim's AdjudicatorId to the manager's AdjudicatorId,
             // if (manager == null)
             //     throw new NullReferenceException("Unable to find an appropriate manager to assign approval to");
@@ -155,7 +159,9 @@ namespace CoreClaims.Infrastructure.BusinessRules
             // claim.ClaimStatus = ClaimStatus.ApprovalRequired;
             // claim.Comment = "[Automatic] Reassigned: Adjustment requires manager approval";
 
-            return claim;
+            adjudicatorChanged = claim.PreviousAdjudicatorId != claim.AdjudicatorId;
+
+            return (claim, adjudicatorChanged);
         }
     }
 }

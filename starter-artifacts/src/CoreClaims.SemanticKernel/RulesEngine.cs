@@ -25,7 +25,7 @@ namespace CoreClaims.SemanticKernel
 
             // TODO: Uncomment the code below and instantiate a new KernelBuilder.
             //var builder = __________;
-            // builder.WithAzureTextCompletionService(
+            // builder.WithAzureChatCompletionService(
             //          _settings.OpenAICompletionsDeployment,
             //          _settings.OpenAIEndpoint,
             //          _settings.OpenAIKey);
