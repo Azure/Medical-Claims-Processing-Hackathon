@@ -3,13 +3,15 @@
 Param(
     [parameter(Mandatory=$true)][string]$resourceGroup,
     [parameter(Mandatory=$true)][string]$location,
-    [parameter(Mandatory=$true)][string]$suffix
+    [parameter(Mandatory=$true)][string]$suffix,
+    [parameter(Mandatory={-not $deployAks})][string]$openAiName,
+    [parameter(Mandatory={-not $deployAks})][string]$openAiCompletionsDeployment,
+    [parameter(Mandatory={-not $deployAks})][string]$openAiRg,
+    [parameter(Mandatory=$true)][bool]$deployAks
 )
 
 Push-Location $($MyInvocation.InvocationName | Split-Path)
 $sourceFolder=$(Join-Path -Path ../.. -ChildPath infrastructure)
-
-$script="main.bicep"
 
 Write-Host "--------------------------------------------------------" -ForegroundColor Yellow
 Write-Host "Deploying Bicep script $script" -ForegroundColor Yellow
@@ -23,6 +25,14 @@ if (-not $rg) {
 
 Write-Host "Beginning the Bicep deployment..." -ForegroundColor Yellow
 Push-Location $sourceFolder
-$deploymentState = $(az deployment group create -g $resourceGroup --template-file $script --parameters suffix=$suffix --query "properties.provisioningState" -o tsv)
+
+if ($deployAks) {
+    $script="aksmain.bicep"
+    $deploymentState = $(az deployment group create -g $resourceGroup --template-file $script --parameters suffix=$suffix --query "properties.provisioningState" -o tsv)
+} else {
+    $script="acamain.bicep"
+    $deploymentState = $(az deployment group create -g $resourceGroup --template-file $script --parameters suffix=$suffix --parameters openAiName=$openAiName --parameters openAiDeployment=$openAiCompletionsDeployment --parameters openAiRg=$openAiRg --query "properties.provisioningState" -o tsv)
+}
+
 Pop-Location
 Pop-Location
