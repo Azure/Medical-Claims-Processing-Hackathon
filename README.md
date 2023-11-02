@@ -41,7 +41,7 @@ To start the React web app:
 
 ## Deployment
 
-Check the [Deployment](./docs/deployment.md) page for instructions on how to deploy the solution to your Azure subscription.
+Check the [Deployment](./starter-artifacts/docs/deployment.md) page for instructions on how to deploy the solution to your Azure subscription.
 
 Once your deployment is complete, you can proceed to the [Quickstart](#quickstart) section.
 
