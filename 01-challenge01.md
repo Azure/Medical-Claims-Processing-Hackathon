@@ -21,7 +21,7 @@ Your team must:
   - Azure Cosmos DB NoSQL API
   - Azure OpenAI
   - Azure Event Hubs Standard
-  - Azure Functions Consumption Plan
+  - Azure Container Apps instances for the web API and the Worker Service
   - Azure Application Insights
   - Azure Synapse Analytics Workspace
 - You will load data in a later challenge, but you can get a head start by deploying the Azure Synapse Analytics workspace now.
@@ -58,4 +58,4 @@ To complete this challenge successfully, you must:
 - [Host a static website on Blob Storage](https://learn.microsoft.com/azure/storage/blobs/storage-blob-static-website-host)
 - [Azure Synapse Analytics](https://learn.microsoft.com/azure/synapse-analytics/)
 - [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/overview)
-- [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview)
+- [Azure Container Apps](https://learn.microsoft.com/azure/container-apps/overview)

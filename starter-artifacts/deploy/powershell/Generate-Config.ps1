@@ -4,7 +4,11 @@ Param(
     [parameter(Mandatory=$false)][string[]]$outputFile=$null,
     [parameter(Mandatory=$false)][string[]]$gvaluesTemplate="..,..,gvalues.template.yml",
     [parameter(Mandatory=$false)][string]$ingressClass="addon-http-application-routing",
-    [parameter(Mandatory=$false)][string]$domain
+    [parameter(Mandatory=$false)][string]$domain,
+    [parameter(Mandatory=$true)][string]$openAiName=$null,
+    [parameter(Mandatory=$true)][string]$openAiRg=$null,
+    [parameter(Mandatory=$true)][string]$openAiCompletionsDeployment="completions",
+    [parameter(Mandatory=$true)][bool]$deployAks
 )
 
 function EnsureAndReturnFirstItem($arr, $restype) {
@@ -32,8 +36,13 @@ $dataLakeEndpoint=$(az storage account list -g $resourceGroup -o json | ConvertF
 $dataLakeAccountName=$(az storage account list -g $resourceGroup -o json | ConvertFrom-Json)[0].name
 
 # Ingress endpoint
-$aksName = $(az aks list -g $resourceGroup -o json | ConvertFrom-Json).name
-$webappHostname=$(az aks show -n $aksName -g $resourceGroup -o json --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName | ConvertFrom-Json)
+if ($deployAks)
+{
+    $aksName = $(az aks list -g $resourceGroup -o json | ConvertFrom-Json).name
+    $webappHostname=$(az aks show -n $aksName -g $resourceGroup -o json --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName | ConvertFrom-Json)
+} else {
+    $webappHostname=$(az containerapp show -n aca-api-coreclaims-$suffix -g $resourceGroup -o json --query properties.configuration.ingress.fqdn | ConvertFrom-Json)
+}
 $apiUrl = "https://${webappHostname}/api"
 
 ## Getting CosmosDb info
@@ -59,11 +68,9 @@ if ($appInsightsName -and $appInsightsName.Length -eq 1) {
 Write-Host "App Insights Instrumentation Key: $appinsightsId" -ForegroundColor Yellow
 
 ## Getting OpenAI info
-$openAi=$(az cognitiveservices account list -g $resourceGroup --query "[?kind=='OpenAI'].{name: name, kind:kind, endpoint: properties.endpoint}" -o json | ConvertFrom-Json)
-
-$openAiKey=$(az cognitiveservices account keys list -g $resourceGroup -n $openAi.name -o json --query key1 | ConvertFrom-Json)
-
-$openAiDeployment = "completions"
+$openAi=$(az cognitiveservices account list -g $openAiRg --query "[?kind=='OpenAI' && name=='$openAiName'].{name: name, kind:kind, endpoint: properties.endpoint}" -o json | ConvertFrom-Json)
+$openAiKey=$(az cognitiveservices account keys list -g $openAiRg -n $openAi.name -o json --query key1 | ConvertFrom-Json)
+$openAiDeployment = $openAiCompletionsDeployment
 
 $apiIdentityClientId=$(az identity show -g $resourceGroup -n mi-api-coreclaims-$suffix -o json | ConvertFrom-Json).clientId
 $workerIdentityClientId=$(az identity show -g $resourceGroup -n mi-worker-coreclaims-$suffix -o json | ConvertFrom-Json).clientId
