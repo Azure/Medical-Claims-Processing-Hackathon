@@ -7,7 +7,7 @@ In the previous challenge, you got a taste for how AI can be used to provide gui
 Your team must:
 
 1. Create a new Semantic Kernel plugin to automatically review, approve, deny or forward the claim to a manager.
-2. Modify the `CoreBusinessRule` class to implement the new plugin.
+2. Modify the `RulesEngine` class to implement the new plugin.
 3. Generate new claims to test and verify the new plugin's capability to make claim decisions.
 
 ### Success Criteria
