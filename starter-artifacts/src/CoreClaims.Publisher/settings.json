@@ -1,0 +1,16 @@
+{
+  "GeneratorOptions": {
+    "RunMode": "OneTime",
+    "BatchSize": 10,
+    "Verbose": true,
+    "SleepTime": 1000
+  },
+  "CoreClaimsCosmosDB": {
+    "accountEndpoint": "AccountEndpoint=https://dbcoreclaimsf391c.documents.azure.com:443/;AccountKey={{cosmosKey}};"
+  },
+  "CoreClaimsEventHub": {
+    "fullyQualifiedNamespace": "Endpoint=sb://ehcoreclaimsf391c.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=qsevWBVPtOPsyBswKxa/B0w4CZm+O+/KJ+AEhOzTOTc="
+  }
+}
+
+

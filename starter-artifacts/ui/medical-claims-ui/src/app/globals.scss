@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  --tw-bg-opacity: .5 !important;
+}
+
+/*@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}*/
+
+
+$gray: rgb(235, 235, 235);
+$dark-gray: rgb(68, 68, 68);
+
+* {
+  transition: all 0.1s ease;
+}
+
+body {
+  font-family: "Montserrat";
+  color: $dark-gray;
+  transition: all 0.1s ease-in-out;
+}
+
+h1 {
+  // font-size: 22px;
+  font-size: 1.375rem;
+  color: $dark-gray;
+}
+
+p {
+  // font-size: 14px;
+  font-size: 0.875rem;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.h-14 {
+  z-index: 999;
+}
