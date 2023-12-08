@@ -33,7 +33,7 @@ To complete this challenge successfully, you must:
 - Clone the repo with the starter artifacts and deployment scripts
 - Deploy the Azure services needed to support the claims management interface
 - Deploy Azure OpenAI with the following deployments:
-  - `completions-003` with the `text-davinci-003` model
+  - `completions` with the `gpt-35-turbo` model
 - Deploy an Azure Cosmos DB account with the following configurations:
   - API: NoSQL
   - Consistency: Session
